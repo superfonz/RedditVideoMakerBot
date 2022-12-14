@@ -29,6 +29,13 @@ human = [
     "en_us_007",  # English US - Male 2
     "en_us_009",  # English US - Male 3
     "en_us_010",
+    'en_female_f08_salut_damour',  # Alto
+    'en_male_m03_lobby',           # Tenor
+    'en_female_f08_warmy_breeze',  # Warmy Breeze
+    'en_male_m03_sunshine_soon',   # Sunshine Soon
+    'en_male_narration',           # narrator
+    'en_male_funny',               # wacky
+    'en_female_emotional',         # peaceful
 ]
 voices = nonhuman + human
 
@@ -81,7 +88,11 @@ class TikTok:  # TikTok Text-to-Speech Wrapper
             )
         )
         try:
-            r = requests.post(f"{self.URI_BASE}{voice}&req_text={text}&speaker_map_type=0")
+           headers = {
+                'User-Agent': 'com.zhiliaoapp.musically/2022600030 (Linux; U; Android 7.1.2; es_ES; SM-G988N; Build/NRD90M;tt-ok/3.12.13.1)',
+                'Cookie': 'sessionid=7163b07d6a88d566fc5062c0ededc373'
+            }
+            r = requests.post(f"{self.URI_BASE}{voice}&req_text={text}&speaker_map_type=0&aid=1233", headers=headers)
         except requests.exceptions.SSLError:
             # https://stackoverflow.com/a/47475019/18516611
             session = requests.Session()
