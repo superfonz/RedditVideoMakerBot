@@ -85,6 +85,8 @@ def get_subreddit_threads(POST_ID: str):
     ratio = submission.upvote_ratio * 100
     num_comments = submission.num_comments
 
+
+
     print_substep(f"Video will be: {submission.title} :thumbsup:", style="bold green")
     print_substep(f"Thread has {upvotes} upvotes", style="bold blue")
     print_substep(f"Thread has a upvote ratio of {ratio}%", style="bold blue")
@@ -96,28 +98,42 @@ def get_subreddit_threads(POST_ID: str):
     content["thread_id"] = submission.id
     content["comments"] = []
 
-    for top_level_comment in submission.comments:
-        if isinstance(top_level_comment, MoreComments):
-            continue
-        if top_level_comment.body in ["[removed]", "[deleted]"]:
-            continue  # # see https://github.com/JasonLovesDoggo/RedditVideoMakerBot/issues/78
-        if not top_level_comment.stickied:
-            sanitised = sanitize_text(top_level_comment.body)
-            if not sanitised or sanitised == " ":
+    if settings.config['settings']['storymode']:
+        post_body = submission.selftext.splitlines()
+        while ("" in post_body):
+            post_body.remove("")
+
+        for comment in post_body:
+            content["comments"].append(
+                {
+                    "comment_body": comment,
+                    "comment_url": submission.permalink,
+                    "comment_id": submission.id,
+                }
+            )
+    else:
+        for top_level_comment in submission.comments:
+            if isinstance(top_level_comment, MoreComments):
                 continue
-            if len(top_level_comment.body) <= int(
-                settings.config["reddit"]["thread"]["max_comment_length"]
-            ):
-                if (
-                    top_level_comment.author is not None
-                    and sanitize_text(top_level_comment.body) is not None
-                ):  # if errors occur with this change to if not.
-                    content["comments"].append(
-                        {
-                            "comment_body": top_level_comment.body,
-                            "comment_url": top_level_comment.permalink,
-                            "comment_id": top_level_comment.id,
-                        }
-                    )
+            if top_level_comment.body in ["[removed]", "[deleted]"]:
+                continue  # # see https://github.com/JasonLovesDoggo/RedditVideoMakerBot/issues/78
+            if not top_level_comment.stickied:
+                sanitised = sanitize_text(top_level_comment.body)
+                if not sanitised or sanitised == " ":
+                    continue
+                if len(top_level_comment.body) <= int(
+                    settings.config["reddit"]["thread"]["max_comment_length"]
+                ):
+                    if (
+                        top_level_comment.author is not None
+                        and sanitize_text(top_level_comment.body) is not None
+                    ):  # if errors occur with this change to if not.
+                        content["comments"].append(
+                            {
+                                "comment_body": top_level_comment.body,
+                                "comment_url": top_level_comment.permalink,
+                                "comment_id": top_level_comment.id,
+                            }
+                        )
     print_substep("Received subreddit threads Successfully.", style="bold green")
     return content

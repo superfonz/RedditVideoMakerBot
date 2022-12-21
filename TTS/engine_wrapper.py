@@ -12,6 +12,7 @@ from moviepy.editor import AudioFileClip, CompositeAudioClip, concatenate_audioc
 from utils.console import print_step, print_substep
 from utils.voice import sanitize_text
 from utils import settings
+from typing import Optional
 
 DEFAULT_MAX_LENGTH: int = 50  # video length variable
 
@@ -35,7 +36,7 @@ class TTSEngine:
         tts_module,
         reddit_object: dict,
         path: str = "assets/temp/",
-        max_length: int = DEFAULT_MAX_LENGTH,
+        max_length: int = 400,
         last_clip_length: int = 0,
     ):
         self.tts_module = tts_module()
@@ -59,9 +60,9 @@ class TTSEngine:
         print_step("Saving Text to MP3 files...")
 
         self.call_tts("title", process_text(self.reddit_object["thread_title"]))
-        processed_text = process_text(self.reddit_object["thread_post"])
-        if processed_text != "" and settings.config["settings"]["storymode"] == True:
-            self.call_tts("posttext", processed_text)
+        #processed_text = process_text(self.reddit_object["thread_post"])
+        #if processed_text != "" and settings.config["settings"]["storymode"] == True:
+            #self.call_tts("posttext", processed_text)
 
         idx = None
         for idx, comment in track(enumerate(self.reddit_object["comments"]), "Saving..."):

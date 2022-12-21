@@ -43,6 +43,7 @@ checkversion(__VERSION__)
 
 def main(POST_ID=None):
     reddit_object = get_subreddit_threads(POST_ID)
+    print(reddit_object)
     global redditid
     redditid = id(reddit_object)
     length, number_of_comments = save_text_to_mp3(reddit_object)

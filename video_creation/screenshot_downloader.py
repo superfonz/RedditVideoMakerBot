@@ -14,8 +14,6 @@ import translators as ts
 
 from utils.console import print_step, print_substep
 
-storymode = False
-
 
 def download_screenshots_of_reddit_posts(reddit_object: dict, screenshot_num: int):
     """Downloads screenshots of reddit posts as seen on the web. Downloads to assets/temp/png
@@ -76,7 +74,7 @@ def download_screenshots_of_reddit_posts(reddit_object: dict, screenshot_num: in
         postcontentpath = f"assets/temp/{id}/png/title.png"
         page.locator('[data-test-id="post-content"]').screenshot(path= postcontentpath)
 
-        if storymode:
+        if settings.config['settings']['storymode']:
             page.locator('[data-click-id="text"]').screenshot(
                 path=f"assets/temp/{id}/png/story_content.png"
             )
