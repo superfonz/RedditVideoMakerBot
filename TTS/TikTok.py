@@ -92,7 +92,6 @@ class TikTok:  # TikTok Text-to-Speech Wrapper
                 'User-Agent': 'com.zhiliaoapp.musically/2022600030 (Linux; U; Android 7.1.2; es_ES; SM-G988N; Build/NRD90M;tt-ok/3.12.13.1)',
                 'Cookie': f'sessionid={settings["settings"]["sessionid"]}'
             }
-
             r = requests.post(f"{self.URI_BASE}{voice}&req_text={text}&speaker_map_type=0&aid=1233", headers=headers)
         except requests.exceptions.SSLError:
             # https://stackoverflow.com/a/47475019/18516611
