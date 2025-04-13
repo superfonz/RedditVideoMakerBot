@@ -7,8 +7,8 @@ from typing import Any, Tuple
 
 from moviepy.editor import VideoFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
-from pytube import YouTube
-from pytube.cli import on_progress
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
 
 from utils import settings
 from utils.CONSTANTS import background_options
@@ -57,7 +57,7 @@ def download_background(background_config: Tuple[str, str, str, Any]):
     )
     print_substep("Downloading the backgrounds videos... please be patient 🙏 ")
     print_substep(f"Downloading {filename} from {uri}")
-    YouTube(uri, on_progress_callback=on_progress).streams.filter(res="1080p").first().download(
+    YouTube(uri, on_progress_callback=on_progress, use_po_token=True).streams.filter(res="1080p").first().download(
         "assets/backgrounds", filename=f"{credit}-{filename}"
     )
     print_substep("Background video downloaded successfully! 🎉", style="bold green")

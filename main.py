@@ -12,6 +12,7 @@ from utils.console import print_markdown, print_step, print_substep
 from utils import settings
 from utils.id import id
 from utils.version import checkversion
+from utils.title_editor import round_corners
 
 from video_creation.background import (
     download_background,
@@ -49,6 +50,8 @@ def main(POST_ID=None):
     length, number_of_comments = save_text_to_mp3(reddit_object)
     length = math.ceil(length)
     download_screenshots_of_reddit_posts(reddit_object, number_of_comments)
+    if settings.config["settings"]["story_text"]["rounded_edges"]:
+        round_corners(redditid)
     bg_config = get_background_config()
     download_background(bg_config)
     chop_background_video(bg_config, length, reddit_object)

@@ -42,4 +42,10 @@ background_options = {
         "No Copyright Gameplay",
         lambda t: ("center", 480 + t),
     ),
+    "ror2": (
+       "https://www.youtube.com/watch?v=6pl2ICu-aAE&t=118s",
+        "ror2.mp4",
+        "Ironfonz0",
+        "center",
+    ),
 }

@@ -14,9 +14,6 @@ from utils.voice import sanitize_text
 from utils import settings
 from typing import Optional
 
-DEFAULT_MAX_LENGTH: int = 50  # video length variable
-
-
 class TTSEngine:
 
     """Calls the given TTS engine to reduce code duplication and allow multiple TTS engines.
@@ -36,14 +33,13 @@ class TTSEngine:
         tts_module,
         reddit_object: dict,
         path: str = "assets/temp/",
-        max_length: int = 400,
         last_clip_length: int = 0,
     ):
         self.tts_module = tts_module()
         self.reddit_object = reddit_object
         self.redditid = re.sub(r"[^\w\s-]", "", reddit_object["thread_id"])
         self.path = path + self.redditid + "/mp3"
-        self.max_length = max_length
+        self.max_length = int(settings.config['settings']['videolength'])
         self.length = 0
         self.last_clip_length = last_clip_length
 

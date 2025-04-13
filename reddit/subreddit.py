@@ -10,7 +10,7 @@ from utils.console import print_step, print_substep
 from utils.subreddit import get_subreddit_undone
 from utils.videos import check_done
 from utils.voice import sanitize_text
-
+from nltk.tokenize import sent_tokenize
 
 def get_subreddit_threads(POST_ID: str):
     """
@@ -79,7 +79,7 @@ def get_subreddit_threads(POST_ID: str):
         threads = subreddit.hot(limit=25)
         submission = get_subreddit_undone(threads, subreddit)
     submission = check_done(submission)  # double-checking
-    if submission is None or not submission.num_comments:
+    if submission is None or not submission.num_comments and not settings.config['settings']['storymode']:
         return get_subreddit_threads(POST_ID)  # submission already done. rerun
     upvotes = submission.score
     ratio = submission.upvote_ratio * 100
@@ -99,14 +99,19 @@ def get_subreddit_threads(POST_ID: str):
     content["comments"] = []
 
     if settings.config['settings']['storymode']:
-        post_body = submission.selftext.splitlines()
-        while ("" in post_body):
-            post_body.remove("")
-
+        post_body = sent_tokenize(submission.selftext)
+        # while ("" in post_body):
+        #     post_body.remove("")
+        #
+        # s_post_body = []
+        # for m in post_body:
+        #     si = iter(m.split())
+        #     f = [c+" "+next(si, '')+" "+next(si, '')+" "+next(si, '')+" "+next(si, '') for c in si]
+        #     s_post_body = s_post_body + f
         for comment in post_body:
             content["comments"].append(
                 {
-                    "comment_body": comment,
+                    "comment_body": comment.strip(),
                     "comment_url": submission.permalink,
                     "comment_id": submission.id,
                 }

@@ -4,6 +4,7 @@ from botocore.exceptions import BotoCoreError, ClientError, ProfileNotFound
 import sys
 from utils import settings
 import random
+import os
 
 voices = [
     "Brian",
@@ -31,7 +32,7 @@ class AWSPolly:
 
     def run(self, text, filepath, random_voice: bool = False):
         try:
-            session = Session(profile_name="polly")
+            session = Session(profile_name="default")
             polly = session.client("polly")
             if random_voice:
                 voice = self.randomvoice()
